@@ -1,6 +1,6 @@
 package easyexam.gui;
 
-import java.util.TreeSet;
+import java.util.Arrays;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -13,13 +13,18 @@ import easyexam.core.Schueler;
 public class SchuelerTableModel extends AbstractTableModel implements ArbeitListener {
 	
 	private Arbeit arbeit;
-	private TreeSet<Schueler> sortedSchueler;
+	private Schueler[] sortedSchueler = new Schueler[0];
 	
 	public SchuelerTableModel(Arbeit arbeit) {
 		super();
 		this.arbeit = arbeit;
 		arbeit.addArbeitListener(this);
-		sortedSchueler = new TreeSet<>(arbeit.getAllSchueler());
+		updateSortedSchueler();
+	}
+	
+	private void updateSortedSchueler() {
+		sortedSchueler = arbeit.getAllSchueler().toArray(sortedSchueler);
+		Arrays.sort(sortedSchueler);
 	}
 	
 	@Override
@@ -29,13 +34,12 @@ public class SchuelerTableModel extends AbstractTableModel implements ArbeitList
 
 	@Override
 	public int getRowCount() {
-		return arbeit.getAllSchueler().size();
+		return sortedSchueler.length;
 	}
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		//nicht optimal: stattdessen gleich array als member
-		Schueler s = (Schueler) sortedSchueler.toArray()[row];
+		Schueler s = sortedSchueler[row];
 		
 		switch (col) {
 		case 0:
@@ -65,9 +69,9 @@ public class SchuelerTableModel extends AbstractTableModel implements ArbeitList
 
 	@Override
 	public void arbeitChanged(ArbeitEvent e) {
+		//genauer moeglich?
 		if (e.schuelerDidChange()) {
-			sortedSchueler = new TreeSet<>(arbeit.getAllSchueler());
-			//genauer moeglich?
+			updateSortedSchueler();
 			fireTableDataChanged();
 		}
 	}
