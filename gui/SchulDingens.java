@@ -12,6 +12,7 @@ public class SchulDingens {
 		
 		SchulDingens ding = new SchulDingens();
 		SwingUtilities.invokeLater(() -> {
+			ding.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			ding.frame.setContentPane(new MainTabbedPane());
 			ding.frame.setMinimumSize(new Dimension(500,300));
 			ding.frame.pack();
