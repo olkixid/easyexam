@@ -18,7 +18,6 @@ public class MainTabbedPane extends JTabbedPane {
 	private void buildUI() {
 		//Nicht in build ui machen
 		Arbeit arbeit = new Arbeit();
-		arbeit.addSchueler(new Schueler("Jung", "Lukas", LocalDate.of(1994,6,12)));
 		addTab("Aufgaben", null, new AufgabenPanel(), null);
 		addTab("Schüler", null, new SchuelerPanel(arbeit), null);
 		
