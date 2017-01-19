@@ -12,6 +12,7 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
 
 import easyexam.core.Arbeit;
+import easyexam.core.Schueler;
 
 @SuppressWarnings("serial")
 public class SchuelerPanel extends JPanel implements ActionListener {
@@ -70,10 +71,13 @@ public class SchuelerPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == addSchuelerButton) {
-			AddSchuelerDialog dialog = new AddSchuelerDialog(SwingUtilities.windowForComponent(this) , arbeit);
-			System.out.println("add");	
+			//ugly
+			AddSchuelerDialog dialog = new AddSchuelerDialog(SwingUtilities.windowForComponent(this), arbeit);
 		} else if (ae.getSource() == removeSchuelerButton) {
-			System.out.println("remove");
+			int i = schuelerTable.getSelectedRow();
+			SchuelerTableModel model =  (SchuelerTableModel)schuelerTable.getModel();
+			Schueler s = model.getSchuelerAtIndex(i);
+			arbeit.removeSchueler(s);
 		}
 	}
 }

@@ -22,8 +22,12 @@ public class SchuelerTableModel extends AbstractTableModel implements ArbeitList
 		updateSortedSchueler();
 	}
 	
+	public Schueler getSchuelerAtIndex(int i) {
+		return sortedSchueler[i];
+	}
+
 	private void updateSortedSchueler() {
-		sortedSchueler = arbeit.getAllSchueler().toArray(sortedSchueler);
+		sortedSchueler = arbeit.getAllSchueler().toArray(new Schueler[0]);
 		Arrays.sort(sortedSchueler);
 	}
 	
@@ -74,5 +78,6 @@ public class SchuelerTableModel extends AbstractTableModel implements ArbeitList
 			updateSortedSchueler();
 			fireTableDataChanged();
 		}
+
 	}
 }
