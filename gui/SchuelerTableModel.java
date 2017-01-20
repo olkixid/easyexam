@@ -16,7 +16,6 @@ public class SchuelerTableModel extends AbstractTableModel implements ArbeitList
 	private Schueler[] sortedSchueler = new Schueler[0];
 	
 	public SchuelerTableModel(Arbeit arbeit) {
-		super();
 		this.arbeit = arbeit;
 		arbeit.addArbeitListener(this);
 		updateSortedSchueler();

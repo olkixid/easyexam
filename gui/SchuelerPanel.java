@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -16,7 +15,7 @@ import easyexam.core.Schueler;
 
 @SuppressWarnings("serial")
 public class SchuelerPanel extends JPanel implements ActionListener {
-	private JTable schuelerTable = new JTable();
+	private JTable schuelerTable;
 	private JButton addSchuelerButton;
 	private JButton removeSchuelerButton;
 
@@ -60,6 +59,7 @@ public class SchuelerPanel extends JPanel implements ActionListener {
 		add(removeSchuelerButton);
 		
 		//table
+		schuelerTable = new JTable();
 		JScrollPane tableScrollPane = new JScrollPane(schuelerTable);
 		sl_schuelerPanel.putConstraint(SpringLayout.NORTH, tableScrollPane, 10, SpringLayout.NORTH, this);
 		sl_schuelerPanel.putConstraint(SpringLayout.SOUTH, tableScrollPane, -10, SpringLayout.NORTH, addSchuelerButton);

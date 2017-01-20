@@ -2,6 +2,7 @@ package easyexam.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 
@@ -33,6 +34,10 @@ public class Arbeit {
 		}
 		
 		return true;
+	}
+	
+	public List<String> getAllAufgabenKeys() {
+		return Collections.unmodifiableList(enthalteneAufgabenKeys);
 	}
 	
 	public Aufgabe getAufgabeForKey(String aKey) {
