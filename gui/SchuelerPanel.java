@@ -75,8 +75,7 @@ public class SchuelerPanel extends JPanel implements ActionListener {
 			AddSchuelerDialog dialog = new AddSchuelerDialog(SwingUtilities.windowForComponent(this), arbeit);
 		} else if (ae.getSource() == removeSchuelerButton) {
 			int i = schuelerTable.getSelectedRow();
-			SchuelerTableModel model =  (SchuelerTableModel)schuelerTable.getModel();
-			Schueler s = model.getSchuelerAtIndex(i);
+			Schueler s = arbeit.getSchuelerAt(i);
 			arbeit.removeSchueler(s);
 		}
 	}

@@ -1,7 +1,5 @@
 package easyexam.gui;
 
-import java.util.Arrays;
-
 import javax.swing.table.AbstractTableModel;
 
 import easyexam.core.Arbeit;
@@ -13,21 +11,10 @@ import easyexam.core.Schueler;
 public class SchuelerTableModel extends AbstractTableModel implements ArbeitListener {
 	
 	private Arbeit arbeit;
-	private Schueler[] sortedSchueler = new Schueler[0];
 	
 	public SchuelerTableModel(Arbeit arbeit) {
 		this.arbeit = arbeit;
 		arbeit.addArbeitListener(this);
-		updateSortedSchueler();
-	}
-	
-	public Schueler getSchuelerAtIndex(int i) {
-		return sortedSchueler[i];
-	}
-
-	private void updateSortedSchueler() {
-		sortedSchueler = arbeit.getAllSchueler().toArray(new Schueler[0]);
-		Arrays.sort(sortedSchueler);
 	}
 	
 	@Override
@@ -37,12 +24,12 @@ public class SchuelerTableModel extends AbstractTableModel implements ArbeitList
 
 	@Override
 	public int getRowCount() {
-		return sortedSchueler.length;
+		return arbeit.getNumberOfSchueler();
 	}
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		Schueler s = sortedSchueler[row];
+		Schueler s = arbeit.getSchuelerAt(row);
 		
 		switch (col) {
 		case 0:
@@ -72,9 +59,7 @@ public class SchuelerTableModel extends AbstractTableModel implements ArbeitList
 
 	@Override
 	public void arbeitChanged(ArbeitEvent e) {
-		//genauer moeglich?
 		if (e.schuelerDidChange()) {
-			updateSortedSchueler();
 			fireTableDataChanged();
 		}
 

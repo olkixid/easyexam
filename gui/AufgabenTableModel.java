@@ -7,12 +7,13 @@ import easyexam.core.ArbeitEvent;
 import easyexam.core.ArbeitListener;
 
 @SuppressWarnings("serial")
-public class AufgabenTableModel extends AbstractTableModel {
+public class AufgabenTableModel extends AbstractTableModel implements ArbeitListener {
 	
 	private Arbeit arbeit;
 	
 	public AufgabenTableModel(Arbeit arbeit) {
 		this.arbeit = arbeit;
+		arbeit.addArbeitListener(this);
 	}
 	
 	@Override
@@ -22,7 +23,7 @@ public class AufgabenTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return arbeit.getAllAufgabenKeys().size();
+		return arbeit.getNumberOfAufgabenKeys();
 	}
 
 	@Override
@@ -41,6 +42,13 @@ public class AufgabenTableModel extends AbstractTableModel {
 			return "max. Punkte";
 		default:
 			return "ERROR";
+		}
+	}
+
+	@Override
+	public void arbeitChanged(ArbeitEvent e) {
+		if (e.aufgabeKeysDidChange()) {
+			fireTableDataChanged();
 		}
 	}
 

@@ -1,97 +1,126 @@
 package easyexam.core;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 
-//TODO:observer pattern implementieren (util event oder so?)
-//vielleicht zum bearbeiten views die list und set implementiernen?
 public class Arbeit {
 	private HashMap<Schueler, HashMap<String, Bewertung>> tabelle = new HashMap<>();
+	private ArrayList<Schueler> schuelerList  = new ArrayList<>();
+	private ArrayList<String> aufgabenKeyList = new ArrayList<>();
+	
 	private HashMap<String, Aufgabe> aufgaben = new HashMap<>();
-	private ArrayList<String> enthalteneAufgabenKeys = new ArrayList<>();
 	
 	private ArrayList<ArbeitListener> listener = new ArrayList<>();
 	
-	public boolean addAufgabenKey(String aKey) {
-		if (enthalteneAufgabenKeys.contains(aKey)) {
-			return false;
-		}
-		enthalteneAufgabenKeys.add(aKey);
-		return true;
+	
+	public Aufgabe getAufgabeForKey(String aufgabenKey) {
+		return aufgaben.get(aufgabenKey);
 	}
 	
-	public boolean removeAufgabenKey(String aKey) {
-		if (!enthalteneAufgabenKeys.remove(aKey)) {
-			return false;
-		}
-		aufgaben.remove(aKey);
-		
-		for (HashMap<String, Bewertung> sDaten : tabelle.values()) {
-			sDaten.remove(aKey);
-		}
-		
-		return true;
+	public void setAufgabeForKey(String aufgabenKey, Aufgabe a) {
+		aufgaben.put(aufgabenKey, a);
 	}
 	
-	public List<String> getAllAufgabenKeys() {
-		return Collections.unmodifiableList(enthalteneAufgabenKeys);
-	}
-	
-	public Aufgabe getAufgabeForKey(String aKey) {
-		if ( !enthalteneAufgabenKeys.contains(aKey) ) {
-			return null;
-		}
-		return aufgaben.get(aKey);
-	}
-	
-	public boolean setAufgabeForKey(Aufgabe a, String aKey) {
-		if (!enthalteneAufgabenKeys.contains(aKey)) {
-			return false;
-		}
-		aufgaben.put(aKey, a);
-		return true;
+	public int getNumberOfSchueler() {
+		return tabelle.size();
 	}
 	
 	public boolean addSchueler(Schueler s) {
 		if (tabelle.containsKey(s)) {
 			return false;
 		}
-		
 		tabelle.put(s, new HashMap<>());
+		schuelerList.add(s);
 		fireEvent(new ArbeitEvent(this, ArbeitEvent.SCHUELER_CHANGED));
 		return true;
 	}
 	
 	public boolean removeSchueler(Schueler s) {
-		if(tabelle.remove(s) == null) {
+		boolean successful = schuelerList.remove(s);
+		if (!successful) {
 			return false;
 		}
-
+		tabelle.remove(s);
 		fireEvent(new ArbeitEvent(this, ArbeitEvent.SCHUELER_CHANGED));
 		return true;
 	}
-	
-	public Set<Schueler> getAllSchueler() {
-		return Collections.unmodifiableSet(tabelle.keySet());
+
+	public Schueler removeSchuelerAt(int i) {
+		Schueler removedSchueler = schuelerList.remove(i);
+		if (removedSchueler == null) {
+			return null;
+		}
+		tabelle.remove(removedSchueler);
+		fireEvent(new ArbeitEvent(this, ArbeitEvent.SCHUELER_CHANGED));
+		return removedSchueler;
 	}
 	
-	public Bewertung getBewertungFor(Schueler s, String aKey) {
-		if ( !tabelle.containsKey(s) || !enthalteneAufgabenKeys.contains(aKey) ) {
+	public Schueler getSchuelerAt(int i) {
+		return schuelerList.get(i);
+	}
+	
+	public int getNumberOfAufgabenKeys() {
+		return aufgabenKeyList.size();
+	}
+	
+	public boolean addAufgabenKey(String str) {
+		if (aufgabenKeyList.contains(str)) {
+			return false;
+		}
+		aufgabenKeyList.add(str);
+		fireEvent(new ArbeitEvent(this, ArbeitEvent.AUFGABENKEYS_CHANGED));
+		return true;
+	}
+	
+	public boolean removeAufgabenKey(String str) {
+		if (!aufgabenKeyList.contains(str)) {
+			return false;
+		}
+		aufgabenKeyList.remove(str);
+		
+		for (HashMap<String, Bewertung> inner : tabelle.values()) {
+			inner.remove(str);
+		}
+		
+		fireEvent(new ArbeitEvent(this, ArbeitEvent.AUFGABENKEYS_CHANGED));
+		return true;
+	}
+
+	public String removeAufgabenKeyAt(int i) {
+		String removedAufgabenKey = aufgabenKeyList.remove(i);
+		if (removedAufgabenKey == null) {
 			return null;
 		}
 		
-		return tabelle.get(s).get(aKey);
+		for (HashMap<String, Bewertung> inner : tabelle.values()) {
+			inner.remove(removedAufgabenKey);
+		}
+		
+		fireEvent(new ArbeitEvent(this, ArbeitEvent.AUFGABENKEYS_CHANGED));
+		return removedAufgabenKey;
+	}
+	
+	public String getAufgabenKeyAt(int i) {
+		return aufgabenKeyList.get(i);
+	}
+	
+	
+	public Bewertung getBewertungFor(Schueler s, String aKey) {
+		HashMap<String, Bewertung> inner = tabelle.get(s);
+		if (inner == null) {
+			return null;
+		}
+		
+		return inner.get(aKey);
 	}
 	
 	public boolean setBewertungFor(Schueler s, String aKey, Bewertung b) {
-		if ( !tabelle.containsKey(s) || !enthalteneAufgabenKeys.contains(aKey) ) {
+		HashMap<String, Bewertung> inner = tabelle.get(s);
+		if (inner == null) {
 			return false;
 		}
-		
-		tabelle.get(s).put(aKey, b);
+		inner.put(aKey, b);
 		return true;
 	}
 
