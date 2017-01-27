@@ -22,7 +22,6 @@ public class SchuelerPanel extends JPanel implements ActionListener {
 	private Arbeit arbeit;
 	
 	public SchuelerPanel(Arbeit arbeit) {
-		super();
 		this.arbeit = arbeit;
 		
 		buildUI();
@@ -71,8 +70,8 @@ public class SchuelerPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == addSchuelerButton) {
-			//ugly
 			AddSchuelerDialog dialog = new AddSchuelerDialog(SwingUtilities.windowForComponent(this), arbeit);
+			dialog.setVisible(true);
 		} else if (ae.getSource() == removeSchuelerButton) {
 			int i = schuelerTable.getSelectedRow();
 			Schueler s = arbeit.getSchuelerAt(i);

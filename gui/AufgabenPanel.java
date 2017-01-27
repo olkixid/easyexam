@@ -17,7 +17,6 @@ public class AufgabenPanel extends JPanel {
 	Arbeit arbeit;
 	
 	public AufgabenPanel(Arbeit arbeit) {
-		super();
 		this.arbeit = arbeit;
 		buildUI();
 		

@@ -35,7 +35,6 @@ public class AddSchuelerDialog extends JDialog implements ActionListener {
 		buildUI();
 		addButton.addActionListener(this);
 		cancelButton.addActionListener(this);
-		setVisible(true);
 	}
 	
 	private void buildUI() {
