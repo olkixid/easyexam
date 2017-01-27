@@ -5,6 +5,7 @@ import javax.swing.table.AbstractTableModel;
 import easyexam.core.Arbeit;
 import easyexam.core.ArbeitEvent;
 import easyexam.core.ArbeitListener;
+import easyexam.core.Aufgabe;
 
 @SuppressWarnings("serial")
 public class AufgabenTableModel extends AbstractTableModel implements ArbeitListener {
@@ -27,8 +28,26 @@ public class AufgabenTableModel extends AbstractTableModel implements ArbeitList
 	}
 
 	@Override
-	public Object getValueAt(int arg0, int arg1) {
-		return "test";
+	public Object getValueAt(int row, int col) {
+		String aKey = arbeit.getAufgabenKeyAt(row);
+		Aufgabe a = arbeit.getAufgabeForKey(aKey);
+		
+		switch (col) {
+		case 0:
+			return aKey;
+		case 1:
+			if (a == null) {
+				return null;
+			}
+			return a.getBeschreibung();
+		case 2:
+			if (a == null) {
+				return null;
+			}
+			return a.getMaxPunkte();
+		default:
+			return "ERROR";
+		}
 	}
 	
 	@Override

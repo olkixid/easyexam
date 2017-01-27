@@ -83,6 +83,8 @@ public class Arbeit {
 			inner.remove(str);
 		}
 		
+		aufgaben.remove(str);
+		
 		fireEvent(new ArbeitEvent(this, ArbeitEvent.AUFGABENKEYS_CHANGED));
 		return true;
 	}
@@ -96,6 +98,8 @@ public class Arbeit {
 		for (HashMap<String, Bewertung> inner : tabelle.values()) {
 			inner.remove(removedAufgabenKey);
 		}
+		
+		aufgaben.remove(removedAufgabenKey);
 		
 		fireEvent(new ArbeitEvent(this, ArbeitEvent.AUFGABENKEYS_CHANGED));
 		return removedAufgabenKey;
