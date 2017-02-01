@@ -18,7 +18,7 @@ public class AufgabenPanel extends JPanel implements ActionListener {
 	private JButton addAufgabeButton;
 	private JButton removeAufgabeButton;
 	
-	Arbeit arbeit;
+	private Arbeit arbeit;
 	
 	public AufgabenPanel(Arbeit arbeit) {
 		this.arbeit = arbeit;
