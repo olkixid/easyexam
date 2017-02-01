@@ -17,8 +17,6 @@ public class MainTabbedPane extends JTabbedPane {
 		Arbeit arbeit = new Arbeit();
 		addTab("Aufgaben", null, new AufgabenPanel(arbeit), null);
 		addTab("Schüler", null, new SchuelerPanel(arbeit), null);
-		
-		JPanel auswertungsPanel = new JPanel();
-		addTab("Auswertung", null, auswertungsPanel, null);
+		addTab("Auswertung", null, new AuswertungsPanel(arbeit), null);
 	}
 }
