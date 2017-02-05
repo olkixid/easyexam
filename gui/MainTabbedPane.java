@@ -1,6 +1,5 @@
 package easyexam.gui;
 
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import easyexam.core.Arbeit;

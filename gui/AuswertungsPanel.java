@@ -1,10 +1,14 @@
 package easyexam.gui;
 
 
+import java.awt.Component;
+
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
+import javax.swing.table.TableCellRenderer;
 
 import easyexam.core.Arbeit;
 
@@ -12,14 +16,31 @@ import easyexam.core.Arbeit;
 public class AuswertungsPanel extends JPanel {
 	private JTable auswertungsTable;
 	
+	TableCellRenderer pBarRenderer = new TableCellRenderer() {
+		private JProgressBar pBar = new JProgressBar(0, 100);
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+				boolean hasFocus, int row, int column) {
+			//System.out.println("hallo");
+			if (value.getClass() != Double.class ) {
+				return null;
+			}
+			Double dValue = (Double)value;
+			pBar.setValue( (int)(dValue.doubleValue() * 100.0) );
+			return pBar;
+		}
+	};
+	
 	Arbeit arbeit;
 	
 	public AuswertungsPanel(Arbeit arbeit) {
 		this.arbeit = arbeit;
 		buildUI();
 		
-		//mymodel model = new mzmodel(arbeit);
-		//aufgabenTable.setModel(model);
+		AuswertungsTableModel model = new AuswertungsTableModel(arbeit);
+		auswertungsTable.setModel(model);
+		
+		auswertungsTable.setDefaultRenderer(Double.class, pBarRenderer);
 	}
 	
 	private void buildUI() {

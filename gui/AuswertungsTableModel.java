@@ -8,18 +8,18 @@ import easyexam.core.ArbeitListener;
 import easyexam.core.Schueler;
 
 @SuppressWarnings("serial")
-public class SchuelerTableModel extends AbstractTableModel implements ArbeitListener {
-	
+public class AuswertungsTableModel extends AbstractTableModel implements ArbeitListener {
+
 	private Arbeit arbeit;
 	
-	public SchuelerTableModel(Arbeit arbeit) {
+	public AuswertungsTableModel(Arbeit arbeit) {
 		this.arbeit = arbeit;
 		arbeit.addArbeitListener(this);
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return 2;
 	}
 
 	@Override
@@ -29,15 +29,12 @@ public class SchuelerTableModel extends AbstractTableModel implements ArbeitList
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		Schueler s = arbeit.getSchuelerAt(row);
-		
 		switch (col) {
 		case 0:
-			return s.getName();
+			Schueler s = arbeit.getSchuelerAt(row);
+			return s.getName() + ", " + s.getVorname() + " - " + s.getGebDatum();
 		case 1:
-			return s.getVorname();
-		case 2:
-			return s.getGebDatum().toString();
+			return 0.5;
 		default:
 			return "Can't be! Error!";
 		}
@@ -47,14 +44,20 @@ public class SchuelerTableModel extends AbstractTableModel implements ArbeitList
 	public String getColumnName(int col) {
 		switch (col) {
 		case 0:
-			return "Name";
+			return "Schueler";
 		case 1:
-			return "Vorname";
-		case 2:
-			return "Geburtsdatum";
+			return "Progress";
 		default:
 			return "ERROR";
 		}
+	}
+	
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		if (columnIndex == 1) {
+			return Double.class;
+		}
+		return super.getColumnClass(columnIndex);
 	}
 
 	@Override
@@ -63,4 +66,5 @@ public class SchuelerTableModel extends AbstractTableModel implements ArbeitList
 			fireTableDataChanged();
 		}
 	}
+
 }
