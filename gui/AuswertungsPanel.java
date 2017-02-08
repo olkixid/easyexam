@@ -2,21 +2,26 @@ package easyexam.gui;
 
 
 import java.awt.Component;
+import java.awt.Window;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellRenderer;
 
 import easyexam.core.Arbeit;
+import easyexam.core.Schueler;
 
 @SuppressWarnings("serial")
 public class AuswertungsPanel extends JPanel {
 	private JTable auswertungsTable;
 	
-	TableCellRenderer pBarRenderer = new TableCellRenderer() {
+	private TableCellRenderer pBarRenderer = new TableCellRenderer() {
 		private JProgressBar pBar = new JProgressBar(0, 100);
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -31,7 +36,29 @@ public class AuswertungsPanel extends JPanel {
 		}
 	};
 	
-	Arbeit arbeit;
+	private MouseListener doubleClickRowListener = new MouseAdapter() {
+		@Override
+		public void mouseClicked(java.awt.event.MouseEvent me) {
+			if (me.getClickCount() != 2) {
+				return;
+			}
+			
+			JTable table = (JTable) me.getSource();
+			int row = table.rowAtPoint(me.getPoint());
+			
+			if (row == -1) {
+				return;
+			}
+			
+			Schueler s = arbeit.getSchuelerAt(row);
+			Window window = SwingUtilities.windowForComponent(AuswertungsPanel.this);
+			
+			BewertungsDialog bd = new BewertungsDialog(window, arbeit, s);
+			bd.setVisible(true);
+		};
+	};
+	
+	private Arbeit arbeit;
 	
 	public AuswertungsPanel(Arbeit arbeit) {
 		this.arbeit = arbeit;
@@ -41,6 +68,7 @@ public class AuswertungsPanel extends JPanel {
 		auswertungsTable.setModel(model);
 		
 		auswertungsTable.setDefaultRenderer(Double.class, pBarRenderer);
+		auswertungsTable.addMouseListener(doubleClickRowListener);
 	}
 	
 	private void buildUI() {
