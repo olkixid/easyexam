@@ -45,10 +45,10 @@ public class BewertungsTableModel extends AbstractTableModel {
 			return a.getBeschreibung();
 		case 3:
 			if (b == null) return null;
-			return b.punkte;
+			return b.getPunkte();
 		case 4:
 			if (b == null) return null;
-			return b.hinweis;
+			return b.getHinweis();
 		default:
 			return "ERROR";	
 		}
