@@ -20,7 +20,7 @@ public class BewertungsTableModel extends AbstractTableModel {
 	
 	@Override
 	public int getColumnCount() {
-		return 5;
+		return 4;
 	}
 
 	@Override
@@ -41,12 +41,9 @@ public class BewertungsTableModel extends AbstractTableModel {
 			if (a == null) return null;
 			return a.getMaxPunkte();
 		case 2:
-			if (a == null) return null;
-			return a.getBeschreibung();
-		case 3:
 			if (b == null) return null;
 			return b.getPunkte();
-		case 4:
+		case 3:
 			if (b == null) return null;
 			return b.getHinweis();
 		default:
@@ -62,14 +59,49 @@ public class BewertungsTableModel extends AbstractTableModel {
 		case 1:
 			return "max. Punkte";
 		case 2:
-			return "Beschreibunf";
-		case 3:
 			return "Punkte";
-		case 4:
+		case 3:
 			return "Hinweis";
 		default:
 			return "ERROR";
 		}
+	}
+	
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		if (columnIndex >= 2) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public void setValueAt(Object value, int row, int col) {
+		String aKey = arbeit.getAufgabenKeyAt(row);
+		Bewertung bOld = arbeit.getBewertungFor(schueler, aKey);
+		
+		String hinweis = "";
+		double punkte = 0;
+		
+		if (bOld != null) {
+			hinweis = bOld.getHinweis();
+			punkte = bOld.getPunkte();
+		}
+		
+		switch (col) {
+		case 2:
+			punkte = Double.parseDouble((String)value);
+			break;
+		case 3:
+			hinweis = (String)value;
+			break;
+		}
+		
+		Bewertung b = null;
+		if ( punkte != 0 || !(hinweis.length() == 0) ) {
+			b = new Bewertung(punkte, hinweis);
+		}
+		arbeit.setBewertungFor(schueler, aKey, b);
 	}
 
 }
