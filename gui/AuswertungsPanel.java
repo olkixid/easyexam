@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -21,12 +23,14 @@ import easyexam.core.Schueler;
 public class AuswertungsPanel extends JPanel {
 	private JTable auswertungsTable;
 	
+	private Arbeit arbeit;
+	private static Map<Schueler, BewertungsDialog> openBewertungsDialogs = new HashMap<>();
+	
 	private TableCellRenderer pBarRenderer = new TableCellRenderer() {
 		private JProgressBar pBar = new JProgressBar(0, 100);
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 				boolean hasFocus, int row, int column) {
-			//System.out.println("hallo");
 			if (value.getClass() != Double.class ) {
 				return null;
 			}
@@ -51,14 +55,10 @@ public class AuswertungsPanel extends JPanel {
 			}
 			
 			Schueler s = arbeit.getSchuelerAt(row);
-			Window window = SwingUtilities.windowForComponent(AuswertungsPanel.this);
-			
-			BewertungsDialog bd = new BewertungsDialog(window, arbeit, s);
-			bd.setVisible(true);
+			openDialogForSchueler(s);
 		};
 	};
 	
-	private Arbeit arbeit;
 	
 	public AuswertungsPanel(Arbeit arbeit) {
 		this.arbeit = arbeit;
@@ -82,5 +82,16 @@ public class AuswertungsPanel extends JPanel {
 		sl_aufgabenPanel.putConstraint(SpringLayout.EAST, tableScrollPane, -10, SpringLayout.EAST, this);
 		sl_aufgabenPanel.putConstraint(SpringLayout.SOUTH, tableScrollPane, -10, SpringLayout.SOUTH, this);
 		add(tableScrollPane);
+	}
+	
+	private void openDialogForSchueler(Schueler s) {
+		BewertungsDialog bd = openBewertungsDialogs.get(s);
+		if (bd==null) {
+			Window window = SwingUtilities.windowForComponent(this);
+			bd = new BewertungsDialog(window, arbeit, s);
+			openBewertungsDialogs.put(s, bd);
+		}
+		
+		bd.setVisible(true);
 	}
 }
