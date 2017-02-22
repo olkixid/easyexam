@@ -3,12 +3,14 @@ package easyexam.gui;
 import javax.swing.table.AbstractTableModel;
 
 import easyexam.core.Arbeit;
+import easyexam.core.ArbeitEvent;
+import easyexam.core.ArbeitListener;
 import easyexam.core.Aufgabe;
 import easyexam.core.Bewertung;
 import easyexam.core.Schueler;
 
 @SuppressWarnings("serial")
-public class BewertungsTableModel extends AbstractTableModel {
+public class BewertungsTableModel extends AbstractTableModel implements ArbeitListener {
 
 	private Arbeit arbeit;
 	private Schueler schueler;
@@ -102,6 +104,13 @@ public class BewertungsTableModel extends AbstractTableModel {
 			b = new Bewertung(punkte, hinweis);
 		}
 		arbeit.setBewertungFor(schueler, aKey, b);
+	}
+
+	@Override
+	public void arbeitChanged(ArbeitEvent e) {
+		if (e.aufgabeKeysDidChange() || e.aufgabenDidChange()) {
+			fireTableDataChanged();
+		}
 	}
 
 }

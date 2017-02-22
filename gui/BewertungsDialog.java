@@ -1,6 +1,8 @@
 package easyexam.gui;
 
 import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
@@ -14,12 +16,12 @@ import easyexam.core.Schueler;
 public class BewertungsDialog extends JDialog {
 	private JTable bewertungsTable;
 
-	private Arbeit arbeit;
+	//private Arbeit arbeit;
 	
 	public BewertungsDialog(Window window, Arbeit arbeit, Schueler schueler) {
 		super(window);
 		
-		this.arbeit = arbeit;
+		//this.arbeit = arbeit;
 		
 		buildUI();
 		
@@ -27,6 +29,15 @@ public class BewertungsDialog extends JDialog {
 		bewertungsTable.setModel(model);
 		
 		setTitle(schueler.getName());
+		
+		arbeit.addArbeitListener(model);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				super.windowClosed(e);
+				arbeit.removeArbeitListener(model);
+			}
+		});
 	}
 	
 	private void buildUI() {
