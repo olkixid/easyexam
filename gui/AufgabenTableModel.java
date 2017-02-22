@@ -66,7 +66,7 @@ public class AufgabenTableModel extends AbstractTableModel implements ArbeitList
 
 	@Override
 	public void arbeitChanged(ArbeitEvent e) {
-		if (e.aufgabeKeysDidChange()) {
+		if (e.aufgabeKeysDidChange() || e.aufgabenDidChange()) {
 			fireTableDataChanged();
 		}
 	}

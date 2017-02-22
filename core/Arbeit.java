@@ -20,6 +20,7 @@ public class Arbeit {
 	
 	public void setAufgabeForKey(String aufgabenKey, Aufgabe a) {
 		aufgaben.put(aufgabenKey, a);
+		fireEvent(new ArbeitEvent(this, ArbeitEvent.AUFGABEN_CHANGED));
 	}
 	
 	public int getNumberOfSchueler() {
@@ -125,6 +126,8 @@ public class Arbeit {
 			return false;
 		}
 		inner.put(aKey, b);
+		
+		fireEvent(new ArbeitEvent(this, ArbeitEvent.BEWERTUNGEN_CHANGED));
 		return true;
 	}
 
